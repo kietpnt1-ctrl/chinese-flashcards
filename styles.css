@@ -36,6 +36,24 @@
   --shadow-heavy: rgba(164, 221, 146, 0.4);
 }
 
+[data-theme="purple"] {
+  --bg-color: #f3e8fc;
+  --accent: #b98eff;
+  --accent-hover: #a164ff;
+  --card-bg: #fbf9ff;
+  --shadow-color: rgba(185, 142, 255, 0.2);
+  --shadow-heavy: rgba(185, 142, 255, 0.4);
+}
+
+[data-theme="gray"] {
+  --bg-color: #f0f0f0;
+  --accent: #999999;
+  --accent-hover: #777777;
+  --card-bg: #fafafa;
+  --shadow-color: rgba(153, 153, 153, 0.2);
+  --shadow-heavy: rgba(153, 153, 153, 0.4);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -90,16 +108,42 @@ body {
 .mac-btn.minimize { background-color: var(--mac-yellow); }
 .mac-btn.expand { background-color: var(--mac-green); }
 
-.coins-display {
-  font-size: 14px;
-  font-weight: 800;
-  color: #c9a400;
-  background: #fff8d6;
-  padding: 2px 10px;
-  border-radius: 12px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+.mac-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 15px; border-bottom: 1px solid #eee;
+  background: white; flex-shrink: 0;
+}
+.window-controls { display: flex; gap: 8px; width: 60px; }
+.control { width: 12px; height: 12px; border-radius: 50%; }
+.control.red { background: #ff5f56; }
+.control.yellow { background: #ffbd2e; }
+.control.green { background: #27c93f; }
+
+.coin-display {
+  background: white; border-radius: 15px; padding: 5px 12px;
+  font-weight: 700; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  width: 60px; text-align: right;
   transition: transform 0.2s;
 }
+
+.header-deck-select {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg-color);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  color: var(--text-dark);
+  text-align: center;
+  cursor: pointer;
+  padding: 8px 15px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  flex: 1;
+  max-width: 200px;
+  margin: 0 10px;
+}
+.header-deck-select:hover { background: #fdfdfd; box-shadow: 0 3px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
+.header-deck-select:focus { outline: none; border-color: var(--accent); }
 
 /* Views Navigation Router */
 .views-container {
@@ -112,7 +156,7 @@ body {
 .view {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  padding: 20px;
+  padding: 20px 20px 40px 20px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -186,6 +230,7 @@ body {
   flex-direction: column;
   gap: 10px;
 }
+.mg-card {
   background: var(--card-bg);
   border: 4px solid transparent;
   border-radius: 12px;
@@ -220,11 +265,19 @@ body {
   margin-bottom: 20px;
 }
 
-/* Simplistic Pet Sprites with Emojis for Vanilla JS simplicity */
-.sprite-hamster::before { content: "🐹"; font-size: 100px; display: block; animation: bounce 2s infinite; }
-.sprite-bird::before { content: "🐤"; font-size: 100px; display: block; animation: hoverpet 3s infinite; }
-.sprite-lizard::before { content: "🦎"; font-size: 100px; display: block; animation: bounce 2s infinite; }
-.sprite-beaver::before { content: "🦫"; font-size: 100px; display: block; animation: bounce 2s infinite; }
+/* Simplistic Pet Sprites with Real Images */
+.pet-area div[id="pet-sprite"] {
+  width: 150px;
+  height: 150px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: block;
+}
+.sprite-hamster { background-image: url('hamster.jpg'); animation: bounce 2s infinite; }
+.sprite-penguin { background-image: url('penguin.jpg'); animation: hoverpet 3s infinite; }
+.sprite-lizard { background-image: url('lizard.jpg'); animation: bounce 2s infinite; }
+.sprite-beaver { background-image: url('beaver.jpg'); animation: bounce 2s infinite; }
 
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes hoverpet { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
@@ -257,6 +310,8 @@ div#view-settings h3 { margin-top: 20px; margin-bottom: 5px; }
 .theme-btn.pink { background: #ff8eaa; }
 .theme-btn.blue { background: #8ebcff; }
 .theme-btn.matcha { background: #a4dd92; }
+.theme-btn.purple { background: #b98eff; }
+.theme-btn.gray { background: #999999; }
 
 .input-modern { 
   width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; 
@@ -265,6 +320,22 @@ div#view-settings h3 { margin-top: 20px; margin-bottom: 5px; }
 }
 .input-modern:focus { border-color: var(--accent); }
 .small-text { font-size: 12px; color: #999; display:block; }
+
+#view-settings {
+  display: flex;
+  flex-direction: column;
+}
+.bulk-import-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+#import-textarea {
+  flex: 1; /* expand textarea height to fill empty space */
+  resize: none;
+  min-height: 50px;
+}
 
 /* Reusable Components */
 .btn { border: none; border-radius: 12px; padding: 12px 20px; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s ease; }
