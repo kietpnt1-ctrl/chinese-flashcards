@@ -1,0 +1,16 @@
+{
+  "name": "Chinese Flashcards",
+  "short_name": "Flashcards",
+  "description": "Learn Chinese with a cute pet, earn coins, and play minigames!",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fce8ee",
+  "theme_color": "#ff8eaa",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}

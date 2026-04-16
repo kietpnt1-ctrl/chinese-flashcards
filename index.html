@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Chinese Flashcards</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="mac-window">
+    <!-- Titlebar with macOS Controls & Coins -->
+    <div class="titlebar">
+      <div class="mac-buttons">
+        <div class="mac-btn close"></div>
+        <div class="mac-btn minimize"></div>
+        <div class="mac-btn expand"></div>
+      </div>
+      <div class="coins-display" id="global-coins">🪙 0</div>
+    </div>
+
+    <!-- Active Views Container -->
+    <div class="views-container">
+      
+      <!-- VIEW 1: FLASHCARDS -->
+      <div id="view-flashcards" class="view active">
+        <div class="card-container">
+          <div class="flashcard">
+            <div class="card-face card-front">
+              <button id="btn-listen" class="icon-toggle" aria-label="Listen" title="Listen to Pronunciation">🔊</button>
+              <div id="card-hanzi" class="hanzi">你好</div>
+            </div>
+            <div class="card-face card-back">
+              <div id="card-pinyin" class="pinyin">nǐ hǎo</div>
+              <div id="card-meaning" class="meaning">Hello</div>
+            </div>
+          </div>
+        </div>
+        <div class="controls flashcard-controls">
+           <!-- Normal State before flip -->
+           <button id="btn-flip" class="btn primary full-width">Show Answer</button>
+           
+           <!-- State after flip (hidden initially) -->
+           <div id="guess-buttons" class="guess-buttons hidden">
+             <button id="btn-wrong" class="btn danger full-width">❌ Didn't Know</button>
+             <button id="btn-right" class="btn success full-width">✅ Knew It! (+1🪙)</button>
+           </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: MINIGAME -->
+      <div id="view-minigame" class="view">
+        <div class="minigame-header">
+           <h2>Match-Em!</h2>
+           <p>Find the pairs to earn coins.</p>
+           <button id="btn-start-game" class="btn primary">Start Game</button>
+        </div>
+        <div id="minigame-container" class="minigame-columns hidden">
+           <div id="mg-col-hanzi" class="mg-column"></div>
+           <div id="mg-col-meaning" class="mg-column"></div>
+        </div>
+        <div id="minigame-results" class="minigame-header hidden">
+           <h3>Great Job!</h3>
+           <p>All pairs matched.</p>
+           <button id="btn-restart-game" class="btn secondary">Play Again</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: PET & SHOP -->
+      <div id="view-pet" class="view">
+        <div class="pet-room">
+           <!-- Pet Sprite Container -->
+           <div class="pet-area">
+             <div id="pet-sprite" class="sprite-mouse"></div>
+           </div>
+           
+           <!-- Level bar -->
+           <div class="level-hud">
+             <span class="level-text" id="pet-level-text">Lv 1</span>
+             <div class="xp-bar-container">
+                <div class="xp-bar-fill" id="pet-xp-fill"></div>
+             </div>
+           </div>
+        </div>
+        
+        <div class="shop-area">
+           <h3>Food Shop</h3>
+           <div class="shop-items">
+             <button class="shop-btn" data-food="matcha" data-cost="5">
+               🍵 Matcha (5 🪙)<br><span class="small-text">+10 XP</span>
+             </button>
+             <button class="shop-btn" data-food="cake" data-cost="15">
+               🍰 Cake (15 🪙)<br><span class="small-text">+40 XP</span>
+             </button>
+           </div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: SETTINGS & IMPORT -->
+      <div id="view-settings" class="view">
+         <h2>Settings</h2>
+         
+         <div class="settings-group">
+            <label>Choose Theme:</label>
+            <div class="theme-picker">
+              <button class="theme-btn pink" data-theme="pink"></button>
+              <button class="theme-btn blue" data-theme="blue"></button>
+              <button class="theme-btn matcha" data-theme="matcha"></button>
+            </div>
+         </div>
+
+         <div class="settings-group">
+            <label>Choose Pet:</label>
+            <select id="pet-select" class="input-modern">
+               <option value="hamster">Cute Hamster 🐹</option>
+               <option value="bird">Little Bird 🐤</option>
+               <option value="lizard">Cool Lizard 🦎</option>
+               <option value="beaver">Busy Beaver 🦫</option>
+            </select>
+         </div>
+         
+         <h3>Deck Info</h3>
+         <p class="small-text" style="margin-bottom: 15px;">Total words: <strong id="total-words-count" style="color:var(--text-dark); font-size:16px;">0</strong></p>
+         
+         <h3>Bulk Import</h3>
+         <p class="small-text">Format: <code>Word : pinyin - meaning</code> (one per line)</p>
+         <textarea id="import-textarea" class="input-modern" rows="4" placeholder="例如 : li ru - for example...&#10;水 - water"></textarea>
+         <button id="btn-import" class="btn primary full-width">Import Cards</button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+       <button class="nav-btn active" data-target="view-flashcards">
+          <span style="font-size:18px;">📝</span> Cards
+       </button>
+       <button class="nav-btn" data-target="view-minigame">
+          <span style="font-size:18px;">🎮</span> Play
+       </button>
+       <button class="nav-btn" data-target="view-pet">
+          <span style="font-size:18px;">🐾</span> Pet
+       </button>
+       <button class="nav-btn" data-target="view-settings">
+          <span style="font-size:18px;">⚙️</span> Setup
+       </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Action successful!</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
