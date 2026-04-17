@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Chinese Flashcards</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="mac-window">
+    <!-- Window Controls -->
+      <div class="mac-header">
+        <div class="window-controls">
+          <div class="control red"></div>
+          <div class="control yellow"></div>
+          <div class="control green"></div>
+        </div>
+        <select id="deck-select" class="header-deck-select">
+          <option value="all">All Words (Mixed)</option>
+          <option value="hsk1">HSK 1</option>
+          <option value="hsk2">HSK 2</option>
+          <option value="hsk3">HSK 3</option>
+          <option value="hsk4">HSK 4</option>
+          <option value="hsk5">HSK 5</option>
+          <option value="hsk6">HSK 6</option>
+          <option value="custom">Custom / Other</option>
+        </select>
+        <div class="coin-display">
+          🪙 <span id="coin-counter">0</span>
+        </div>
+      </div>
+
+    <!-- Active Views Container -->
+    <div class="views-container">
+      
+      <!-- VIEW 1: FLASHCARDS -->
+      <div id="view-flashcards" class="view active">
+        <div class="card-container">
+          <div class="flashcard">
+            <div class="card-face card-front">
+              <button id="btn-listen" class="icon-toggle" aria-label="Listen" title="Listen to Pronunciation">🔊</button>
+              <div id="card-hanzi" class="hanzi">你好</div>
+            </div>
+            <div class="card-face card-back">
+              <div id="card-pinyin" class="pinyin">nǐ hǎo</div>
+              <div id="card-meaning" class="meaning">Hello</div>
+            </div>
+          </div>
+        </div>
+        <div class="controls flashcard-controls">
+           <!-- Normal State before flip -->
+           <button id="btn-flip" class="btn primary full-width">Show Answer</button>
+           
+           <!-- State after flip (hidden initially) -->
+           <div id="guess-buttons" class="guess-buttons hidden">
+             <button id="btn-wrong" class="btn danger full-width">❌ Didn't Know</button>
+             <button id="btn-right" class="btn success full-width">✅ Knew It! (+1🪙)</button>
+           </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: MINIGAME -->
+      <div id="view-minigame" class="view">
+        
+        <!-- Menu -->
+        <div id="minigame-menu">
+           <h2>Minigames</h2>
+           <p>Choose a game to earn coins!</p>
+           <div style="margin-top: 20px;">
+             <button id="btn-menu-match" class="btn primary full-width">🎴 Match-Em!</button>
+             <button id="btn-menu-listen" class="btn primary full-width" style="margin-top: 15px;">🎧 Listen & Type</button>
+           </div>
+        </div>
+
+        <!-- Match Em Game -->
+        <div id="mg-match-em" class="hidden">
+           <div class="minigame-header">
+             <button class="btn secondary btn-mg-back" style="margin-bottom:10px; font-size:12px; padding:5px 10px; border:1px solid #ddd;">← Back</button>
+             <h2>Match-Em!</h2>
+           </div>
+           <div id="minigame-container" class="minigame-columns">
+              <div id="mg-col-hanzi" class="mg-column"></div>
+              <div id="mg-col-meaning" class="mg-column"></div>
+           </div>
+           <div id="minigame-results" class="minigame-header hidden">
+              <h3>Great Job!</h3>
+              <p>All pairs matched.</p>
+              <button id="btn-restart-match" class="btn primary mt-10">Play Again</button>
+           </div>
+        </div>
+
+        <!-- Listen & Type Game -->
+        <div id="mg-listen" class="hidden">
+           <div class="minigame-header">
+             <button class="btn secondary btn-mg-back" style="margin-bottom:10px; font-size:12px; padding:5px 10px; border:1px solid #ddd;">← Back</button>
+             <h2>Listen & Type</h2>
+             <p style="font-size:13px; color:#666;">Type the Meaning or Pinyin!</p>
+           </div>
+           <div class="listen-game-area" style="text-align:center; margin-top:20px;">
+             <button id="btn-listen-play" style="font-size:50px; background:var(--card-bg); border:1px solid rgba(255,142,170,0.2); padding:15px; border-radius:50%; box-shadow:0 10px 25px var(--shadow-color); cursor:pointer; transition:transform 0.2s;">🔊</button>
+             <div style="margin-top:30px;">
+               <input type="text" id="listen-input" class="input-modern" placeholder="e.g. ni hao or hello" autocomplete="off">
+               <button id="btn-listen-submit" class="btn primary full-width">Check Answer</button>
+             </div>
+           </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 3: PET & SHOP -->
+      <div id="view-pet" class="view">
+        <div class="pet-room">
+           <!-- Pet Sprite Container -->
+           <div class="pet-area">
+             <div id="pet-sprite" class="sprite-mouse"></div>
+           </div>
+           
+           <!-- Level bar -->
+           <div class="level-hud">
+             <span class="level-text" id="pet-level-text">Lv 1</span>
+             <div class="xp-bar-container">
+                <div class="xp-bar-fill" id="pet-xp-fill"></div>
+             </div>
+           </div>
+        </div>
+        
+        <div class="shop-area">
+           <h3>Food Shop</h3>
+           <div class="shop-items">
+             <button class="shop-btn" data-food="matcha" data-cost="5">
+               🍵 Matcha (5 🪙)<br><span class="small-text">+10 XP</span>
+             </button>
+             <button class="shop-btn" data-food="cake" data-cost="15">
+               🍰 Cake (15 🪙)<br><span class="small-text">+40 XP</span>
+             </button>
+           </div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: SETTINGS & IMPORT -->
+      <div id="view-settings" class="view">
+         <h2>Settings</h2>
+         
+         <div class="settings-group">
+            <label>Choose Theme:</label>
+            <div class="theme-picker">
+              <button class="theme-btn pink" data-theme="pink"></button>
+              <button class="theme-btn blue" data-theme="blue"></button>
+              <button class="theme-btn matcha" data-theme="matcha"></button>
+              <button class="theme-btn purple" data-theme="purple"></button>
+              <button class="theme-btn gray" data-theme="gray"></button>
+            </div>
+         </div>
+
+         <div class="settings-group">
+            <label>Choose Pet:</label>
+            <select id="pet-select" class="input-modern">
+               <option value="hamster">Cute Hamster</option>
+               <option value="penguin">Little Penguin</option>
+               <option value="lizard">Cool Lizard</option>
+               <option value="beaver">Busy Beaver</option>
+            </select>
+         </div>
+         
+         <h3>Deck Info</h3>
+         <p class="small-text" style="margin-bottom: 20px;">Total words: <strong id="total-words-count" style="color:var(--text-dark); font-size:16px;">0</strong></p>
+         
+         <div class="bulk-import-container">
+           <h3 style="margin-bottom: 5px;">Bulk Import Decks</h3>
+           
+           <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 10px; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.05);">
+             <p class="small-text" style="font-weight: 700; color: #555; margin-bottom: 5px;">Format Guide:</p>
+             <pre style="font-size: 11px; color: #666; font-family: monospace; white-space: pre-wrap; margin:0;">[HSK 1]
+你好 : nǐ hǎo - Hello
+
+[HSK 2]
+准备 : zhǔn bèi - Prepare</pre>
+           </div>
+           
+           <div style="display:flex; gap:10px; margin-bottom:10px;">
+             <input type="file" id="file-uploader" accept=".txt" style="display:none;">
+             <label for="file-uploader" class="btn secondary" style="flex:1; text-align:center;">📄 Upload .txt</label>
+             <button id="btn-import" class="btn primary" style="flex:1;">Save Text</button>
+           </div>
+           
+           <textarea id="import-textarea" class="input-modern" placeholder="[HSK 1]&#10;水 : shuǐ - water"></textarea>
+         </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+       <button class="nav-btn active" data-target="view-flashcards">
+          <span style="font-size:18px;">📝</span> Cards
+       </button>
+       <button class="nav-btn" data-target="view-minigame">
+          <span style="font-size:18px;">🎮</span> Play
+       </button>
+       <button class="nav-btn" data-target="view-pet">
+          <span style="font-size:18px;">🐾</span> Pet
+       </button>
+       <button class="nav-btn" data-target="view-settings">
+          <span style="font-size:18px;">⚙️</span> Setup
+       </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Action successful!</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
